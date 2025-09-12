@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aero-lab Simulation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="simCanvas" width="800" height="400"></canvas>
+
+  <select id="carSelector" onchange="changeCar()">
+    <option value="car3.png">Car 3</option>
+    <option value="car4.png">Car 4</option>
+    <option value="car5.png">Car 5</option>
+  </select>
+
+  <div>
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="0" max="10" step="0.1">
+    <label>Friction</label>
+    <input type="range" id="frictionSlider" min="0" max="10" step="0.1">
+    <label>Tailwind</label>
+    <input type="range" id="tailwindSlider" min="0" max="10" step="0.1">
+    <label>Air Resistance</label>
+    <input type="range" id="airSlider" min="0" max="10" step="0.1">
+  </div>
+
+  <button onclick="startSim()">Start</button>
+  <button onclick="resetSim()">Reset</button>
+
+  <div id="forcePanel">
+    <h3>Force Breakdown</h3>
+    <p>Speed: <span id="speedVal">0</span> m/s</p>
+    <p>Tailwind: <span id="tailwindVal">0</span> m/s</p>
+    <p>Friction: <span id="frictionVal">0</span></p>
+    <p>Air Resistance: <span id="airVal">0</span></p>
+    <p><strong>Net Velocity:</strong> <span id="velocityVal">0</span> m/s</p>
+  </div>
+
+  <div id="explanationBox">
+    <h3>How It Works</h3>
+    <p>Net velocity is calculated using the formula:</p>
+    <p><code>(Speed + Tailwind) - (Friction + Air Resistance)</code></p>
+    <p>This shows how helpful forces increase motion, while opposing forces reduce it.</p>
+  </div>
+
+  <button onclick="showQuiz()">Take a Quick Quiz</button>
+  <div id="quizBox" style="display:none;">
+    <p>Which force helps the car move forward?</p>
+    <button onclick="handleAnswer('tailwind')">Tailwind</button>
+    <button onclick="handleAnswer('friction')">Friction</button>
+    <button onclick="handleAnswer('air')">Air Resistance</button>
+    <p id="quizFeedback"></p>
+  </div>
+
+  <script src="simulation.js"></script>
+</body>
+</html>
 
