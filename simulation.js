@@ -118,4 +118,6 @@ function showQuestion() {
   optionsDiv.innerHTML = "";
 
   q.options.forEach(option => {
-    const btn = document
+    const btn = document.createElement("button");
+    btn.innerText = option;
+    btn.onclick = () => handle
