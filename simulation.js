@@ -82,19 +82,40 @@ function animate() {
   }
 }
 
-function showQuiz() {
+// Quiz logic
+const quizData = [
+  {
+    question: "Which force helps the car move forward?",
+    options: ["Tailwind", "Friction", "Air Resistance"],
+    correct: "Tailwind"
+  },
+  {
+    question: "Which force opposes motion due to contact with the road?",
+    options: ["Tailwind", "Friction", "Speed"],
+    correct: "Friction"
+  },
+  {
+    question: "What happens if opposing forces are greater than helpful forces?",
+    options: ["The car speeds up", "The car stops or slows down", "The car flies"],
+    correct: "The car stops or slows down"
+  }
+];
+
+let currentQuestion = 0;
+
+function startQuiz() {
+  currentQuestion = 0;
   document.getElementById("quizBox").style.display = "block";
   document.getElementById("quizFeedback").innerText = "";
+  showQuestion();
 }
 
-function handleAnswer(choice) {
-  const feedback = document.getElementById("quizFeedback");
-  if (choice === "tailwind") {
-    feedback.innerText = "✅ Correct! Tailwind helps push the car forward.";
-    feedback.style.color = "green";
-  } else {
-    feedback.innerText = "❌ Try again. That force actually slows the car down.";
-    feedback.style.color = "red";
-  }
-}
+function showQuestion() {
+  const q = quizData[currentQuestion];
+  document.getElementById("quizQuestion").innerText = q.question;
 
+  const optionsDiv = document.getElementById("quizOptions");
+  optionsDiv.innerHTML = "";
+
+  q.options.forEach(option => {
+    const btn = document
