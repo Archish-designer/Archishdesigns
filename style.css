@@ -1,7 +1,23 @@
 body {
   font-family: sans-serif;
-  text-align: center;
   background-color: #f0f4f8;
+  margin: 0;
+  padding: 20px;
+}
+
+#mainContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+#leftPanel {
+  flex: 1;
+}
+
+#rightPanel {
+  width: 300px;
 }
 
 canvas {
@@ -10,11 +26,9 @@ canvas {
 }
 
 #forcePanel, #explanationBox, #quizBox {
-  margin: 10px auto;
-  width: 600px;
   background: #fff;
   padding: 15px;
+  margin-top: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
