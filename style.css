@@ -27,6 +27,28 @@ canvas {
   width: 100%;
 }
 
+#controlPanel {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.sliderGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 #forcePanel, #explanationBox, #quizBox {
   background: #fff;
   padding: 15px;
@@ -36,5 +58,5 @@ canvas {
 }
 
 button {
-  margin: 10px 5px;
+  margin: 5px 0;
 }
