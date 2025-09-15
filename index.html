@@ -7,11 +7,11 @@
 <body>
 
   <div id="mainContainer">
-    <!-- Left Panel: Canvas + Quiz -->
+    <!-- Left Side: Canvas + Quiz -->
     <div id="leftPanel">
-      <canvas id="simCanvas" width="800" height="400"></canvas>
+      <canvas id="simCanvas" width="700" height="400"></canvas>
 
-      <!-- Quiz Section -->
+      <!-- Quiz stays here -->
       <button onclick="showQuiz()">Take a Quick Quiz</button>
       <div id="quizBox" style="display:none;">
         <p>Which force helps the car move forward?</p>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <!-- Right Panel: Controls + Force Info -->
+    <!-- Right Side: Controls + Force Info -->
     <div id="rightPanel">
       <select id="carSelector" onchange="changeCar()">
         <option value="car3.png">Car 3</option>
