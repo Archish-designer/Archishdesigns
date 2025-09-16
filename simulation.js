@@ -123,3 +123,31 @@ function showQuestion() {
     btn.onclick = function () {
       handleAnswer(option);
     };
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function handleAnswer(selected) {
+  const q = quizData[currentQuestion];
+  const feedback = document.getElementById("quizFeedback");
+
+  if (selected === q.correct) {
+    feedback.innerText = "✅ Correct!";
+    feedback.style.color = "green";
+  } else {
+    feedback.innerText = "❌ Incorrect. Try again.";
+    feedback.style.color = "red";
+    return;
+  }
+
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    setTimeout(() => {
+      feedback.innerText = "";
+      showQuestion();
+    }, 1000);
+  } else {
+    feedback.innerText = "🎉 Quiz complete!";
+    feedback.style.color = "blue";
+  }
+}
