@@ -3,9 +3,9 @@ const canvas = document.getElementById("simCanvas");
 const ctx = canvas.getContext("2d");
 
 // Constants for car dimensions and road position
-const carWidth = 250; // Width of the car image in pixels
-const carHeight = 120; // Height of the car image in pixels
-const roadY = canvas.height - carHeight - 5; // Y-position where the car sits
+const carWidth = 250; // Width of the car image 
+const carHeight = 120; // Height of the car image 
+const roadY = canvas.height - carHeight - 5; // position of where the car sits
 
 // Class representing the simulation logic
 class AeroLabSimulation {
@@ -19,7 +19,7 @@ class AeroLabSimulation {
   #isRunning = false; // Flag to control animation loop
 
   constructor() {
-    // Load default car image
+    // Load  car image
     this.carImage = new Image();
     this.carImage.src = "car3.png";
     this.carImage.onload = () => this.drawCar();
@@ -105,7 +105,7 @@ class AeroLabSimulation {
 
   // Method to calculate net velocity
   calculateNetVelocity() {
-    // Helpful forces minus opposing forces
+    // arithmatic method
     return (this.#speed + this.#tailwind) - (this.#friction + this.#airResistance);
   }
 
@@ -122,7 +122,6 @@ class AeroLabSimulation {
   }
 }
 
-// Instantiate simulation object
 const sim = new AeroLabSimulation();
 
 // Event bindings
