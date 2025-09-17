@@ -1,88 +1,149 @@
-let canvas = document.getElementById("simCanvas");
-let ctx = canvas.getContext("2d");
+// Canvas setup
+const canvas = document.getElementById("simCanvas");
+const ctx = canvas.getContext("2d");
 
-const carWidth = 250;
-const carHeight = 120;
-const roadY = canvas.height - carHeight - 5;
+// Constants for car dimensions and road position
+const carWidth = 250; // Width of the car image in pixels
+const carHeight = 120; // Height of the car image in pixels
+const roadY = canvas.height - carHeight - 5; // Y-position where the car sits
 
-let speed = 0;
-let friction = 0;
-let tailwind = 0;
-let air = 0;
-let velocity = 0;
-let position = 0;
-let isRunning = false;
+// Class representing the simulation logic
+class AeroLabSimulation {
+  // Encapsulated properties
+  #speed = 0;       // Speed input (must be a number)
+  #friction = 0;    // Friction force (must be a number)
+  #tailwind = 0;    // Tailwind force (must be a number)
+  #airResistance = 0; // Air resistance force (must be a number)
+  #velocity = 0;    // Net velocity (calculated)
+  #position = 0;    // Car's horizontal position
+  #isRunning = false; // Flag to control animation loop
 
-let carImage = new Image();
-carImage.src = "car3.png";
+  constructor() {
+    // Load default car image
+    this.carImage = new Image();
+    this.carImage.src = "car3.png";
+    this.carImage.onload = () => this.drawCar();
 
-carImage.onload = () => {
-  drawCar();
-};
+    // Load background image
+    this.background = new Image();
+    this.background.src = "city.png";
+    this.background.onload = () => this.drawCar();
+  }
 
+  // Getters
+  get velocity() {
+    return this.#velocity;
+  }
+
+  get position() {
+    return this.#position;
+  }
+
+  // Setters
+  set speed(val) {
+    this.#speed = parseFloat(val);
+  }
+
+  set friction(val) {
+    this.#friction = parseFloat(val);
+  }
+
+  set tailwind(val) {
+    this.#tailwind = parseFloat(val);
+  }
+
+  set airResistance(val) {
+    this.#airResistance = parseFloat(val);
+  }
+
+  // Method to change car image
+  changeCar(src) {
+    this.carImage.src = src;
+    this.carImage.onload = () => this.drawCar();
+  }
+
+  // Method to draw car and background
+  drawCar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.carImage, this.#position, roadY, carWidth, carHeight);
+  }
+
+  // Method to reset simulation
+  reset() {
+    this.#isRunning = false;
+    this.#position = 0;
+    this.drawCar();
+  }
+
+  // Method to start simulation
+  start() {
+    // Read values from sliders
+    this.speed = document.getElementById("speedSlider").value;
+    this.friction = document.getElementById("frictionSlider").value;
+    this.tailwind = document.getElementById("tailwindSlider").value;
+    this.airResistance = document.getElementById("airSlider").value;
+
+    // Calculate net velocity
+    this.#velocity = this.calculateNetVelocity();
+
+    // Update force breakdown panel
+    document.getElementById("speedVal").innerText = this.#speed;
+    document.getElementById("tailwindVal").innerText = this.#tailwind;
+    document.getElementById("frictionVal").innerText = this.#friction;
+    document.getElementById("airVal").innerText = this.#airResistance;
+    document.getElementById("velocityVal").innerText = this.#velocity.toFixed(2);
+
+    // If velocity is positive, start animation
+    if (this.#velocity > 0) {
+      this.#isRunning = true;
+      this.animate();
+    } else {
+      alert("The car will not move since the net velocity is zero due to the opposing forces.");
+    }
+  }
+
+  // Method to calculate net velocity
+  calculateNetVelocity() {
+    // Helpful forces minus opposing forces
+    return (this.#speed + this.#tailwind) - (this.#friction + this.#airResistance);
+  }
+
+  // Animation loop
+  animate() {
+    // While simulation is running, update position and redraw
+    if (this.#isRunning) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(this.background, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(this.carImage, this.#position, roadY, carWidth, carHeight);
+      this.#position += this.#velocity;
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+}
+
+// Instantiate simulation object
+const sim = new AeroLabSimulation();
+
+// Event bindings
 function changeCar() {
   const selectedCar = document.getElementById("carSelector").value;
-  carImage.src = selectedCar;
-  carImage.onload = () => drawCar();
-}
-
-const background = new Image();
-background.src = "city.png";
-
-background.onload = () => {
-  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-  drawCar();
-};
-
-function drawCar() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-  ctx.drawImage(carImage, position, roadY, carWidth, carHeight);
-}
-
-function resetSim() {
-  isRunning = false;
-  position = 0;
-  drawCar();
+  sim.changeCar(selectedCar);
 }
 
 function startSim() {
-  speed = parseFloat(document.getElementById("speedSlider").value);
-  friction = parseFloat(document.getElementById("frictionSlider").value);
-  tailwind = parseFloat(document.getElementById("tailwindSlider").value);
-  air = parseFloat(document.getElementById("airSlider").value);
-
-  velocity = calculateNetVelocity();
-
-  document.getElementById("speedVal").innerText = speed;
-  document.getElementById("tailwindVal").innerText = tailwind;
-  document.getElementById("frictionVal").innerText = friction;
-  document.getElementById("airVal").innerText = air;
-  document.getElementById("velocityVal").innerText = velocity.toFixed(2);
-
-  if (velocity > 0) {
-    isRunning = true;
-    animate();
-  } else {
-    alert("The car will not move since the net velocity is zero due to the opposing forces.");
-  }
+  sim.start();
 }
 
-function calculateNetVelocity() {
-  return (speed + tailwind) - (friction + air);
+function resetSim() {
+  sim.reset();
 }
 
-function animate() {
-  if (isRunning) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(carImage, position, roadY, carWidth, carHeight);
-    position += velocity;
-    requestAnimationFrame(animate);
-  }
-}
+// ----------------------
+// Quiz Logic
+// ----------------------
 
-// Quiz logic
+// Array of quiz questions (collection of objects)
 const quizData = [
   {
     question: "Which force helps the car move forward?",
@@ -101,7 +162,7 @@ const quizData = [
   }
 ];
 
-let currentQuestion = 0;
+let currentQuestion = 0; // Tracks which question is being shown
 
 function startQuiz() {
   currentQuestion = 0;
@@ -117,6 +178,7 @@ function showQuestion() {
   const optionsDiv = document.getElementById("quizOptions");
   optionsDiv.innerHTML = "";
 
+  // Loop through options and create buttons
   q.options.forEach(option => {
     const btn = document.createElement("button");
     btn.innerText = option;
@@ -131,17 +193,20 @@ function handleAnswer(selected) {
   const q = quizData[currentQuestion];
   const feedback = document.getElementById("quizFeedback");
 
+  // If answer is correct
   if (selected === q.correct) {
     feedback.innerText = "✅ Correct!";
     feedback.style.color = "green";
   } else {
     feedback.innerText = "❌ Incorrect. Try again.";
     feedback.style.color = "red";
-    return;
+    return; // Exit early if wrong
   }
 
+  // Move to next question
   currentQuestion++;
   if (currentQuestion < quizData.length) {
+    // Wait before showing next question
     setTimeout(() => {
       feedback.innerText = "";
       showQuestion();
